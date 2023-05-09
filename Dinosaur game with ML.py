@@ -447,17 +447,6 @@ while True: #change later to allow for multiple 'games'
 	if generation > 1:
 		sorted_neural_networks[:, 0][np.isin(sorted_neural_networks[:, 0], screen.alive_neural_networks)][0].visualise(screen)
 
-'''
-to do:
-color the lines between nodes
-upload to github
-
-opt:
-reduce amount of players when at least one survives
-count score after first obstacle
-directed change
-'''
-
 
 
 
