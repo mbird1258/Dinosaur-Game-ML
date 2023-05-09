@@ -5,8 +5,10 @@ import tkinter as tk
 import time
 import random
 from datetime import datetime
+import os
 
 #I'm lazy ok?
+print("spacebar to exit")
 print("neural network visualisation key:")
 print("======================================================")
 print("IN:")
@@ -318,9 +320,14 @@ def initiate():
 		neural_networks = np.append(neural_networks, neural_network(players[index], screen))
 
 def end(event):
-	print("best_results:", sorted_neural_networks[0, 0])
 	screen.root.destroy()
-	quit()
+	if input("\n\n\n\n\ndo you wish to see best results?(Y/N) ") == "Y":
+		print("best_results:\n\n", best_neural_network[0])
+	if input("do you wish to save the results?(Y/N) ") == "Y":
+		path = os.getcwd()
+		file = open(path + "/saved neural networks.txt", "a")
+		file.write("\n\n\n" + str(datetime.today()) + "\n\nGenerations:" + str(generation) + "\nScore:" + str(best_neural_network[1]) + "\n\nneural network:\n========================================\n" + str(best_neural_network[0]))
+		file.close()
 
 initiate()
 
@@ -339,6 +346,8 @@ surviving_players = 0
 visualiser_arr = np.array([])
 
 visualiser_weights_arr = np.array([])
+
+best_neural_network = [-1, -1] #array, score
 
 while True: #change later to allow for multiple 'games'
 	#gaming
@@ -404,6 +413,9 @@ while True: #change later to allow for multiple 'games'
 			scores_sorted_indexes = np.argsort(scores)
 
 			sorted_neural_networks = np.array([neural_networks[scores_sorted_indexes[::1]], scores[scores_sorted_indexes[::1]]]).T
+
+			if sorted_neural_networks[len(sorted_neural_networks) - 1][1] >= best_neural_network[1]:
+				best_neural_network = [sorted_neural_networks[len(sorted_neural_networks) - 1][0], sorted_neural_networks[len(sorted_neural_networks) - 1][1]]
 
 			#reproduce
 			for neural_network in sorted_neural_networks[:, 0][int(np.ceil(amount_of_players/100)) : int(np.ceil(amount_of_players / 5 * 4))]:
