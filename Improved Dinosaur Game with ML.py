@@ -6,14 +6,15 @@ import time
 import random
 from datetime import datetime
 
-#I'm lazy ok?
+#details
 print("neural network visualisation key:")
 print("======================================================")
 print("IN:")
-print("grounded?")
-print("obj 1&2 dist")
-print("obj 1&2 width")
-print("obj 1&2 height")
+print("player height above ground")
+print("next obj dist")
+print("screen scroll speed")
+print("next obj width")
+print("nexrt obj height")
 print("\nOUT:")
 print("nothing")
 print("jump")
@@ -173,7 +174,7 @@ class neural_network:
 		next_two_obstacles = [parent2.Obstacles[parent2.Obstacles[:, 1] + parent2.Obstacles[:, 2] > parent1.Player_X_Pos][0], parent2.Obstacles[parent2.Obstacles[:, 1] + parent2.Obstacles[:, 2] > parent1.Player_X_Pos][1]]
 
 		self.nodes = [5, 5, 5, 3]
-		self.L1 = np.array([[parent1.Grounded, next_two_obstacles[0][1] - parent1.Player_X_Pos, screen.ScrollSpeed*10, next_two_obstacles[0][2], next_two_obstacles[0][3]]])
+		self.L1 = np.array([[-parent1.Player_Y_Pos+parent2.Ground_Y_Value, next_two_obstacles[0][1] - parent1.Player_X_Pos, screen.ScrollSpeed*10, next_two_obstacles[0][2], next_two_obstacles[0][3]]])
 		
 		self.L12 = np.random.randn(self.nodes[0], self.nodes[1]) * np.sqrt(2/self.nodes[0])
 		self.LB2 = np.zeros((1, self.nodes[1]))
@@ -232,7 +233,7 @@ class neural_network:
 		next_two_obstacles = [parent2.Obstacles[parent2.Obstacles[:, 1] + parent2.Obstacles[:, 2] > parent1.Player_X_Pos][0], parent2.Obstacles[parent2.Obstacles[:, 1] + parent2.Obstacles[:, 2] > parent1.Player_X_Pos][1]]
 		
 		#prev.layer dot product weight layer + bias
-		self.L1 = np.array([[-parent1.Player_Y_Pos+500, next_two_obstacles[0][1] - parent1.Player_X_Pos, screen.ScrollSpeed*10, next_two_obstacles[0][2], next_two_obstacles[0][3]]])
+		self.L1 = np.array([[-parent1.Player_Y_Pos+parent2.Ground_Y_Value, next_two_obstacles[0][1] - parent1.Player_X_Pos, screen.ScrollSpeed*10, next_two_obstacles[0][2], next_two_obstacles[0][3]]])
 		self.L2 = np.maximum(self.L1 @ self.L12 + self.LB2, 0.01 * self.L1 @ self.L12 + self.LB2)
 		self.L3 = np.maximum(self.L2 @ self.L23 + self.LB3, 0.01 * self.L2 @ self.L23 + self.LB3)
 		self.L4 = np.maximum(self.L3 @ self.L34 + self.LB4, 0.01 * self.L3 @ self.L34 + self.LB4)
@@ -438,7 +439,6 @@ while True: #change later to allow for multiple 'games'
 
 	if generation > 1:
 		sorted_neural_networks[:, 0][np.isin(sorted_neural_networks[:, 0], screen.alive_neural_networks)][0].visualise(screen)
-
 
 
 
