@@ -44,7 +44,7 @@ class game:
 		#create the window
 		self.root = tk.Tk()
 		self.canvas = tk.Canvas(self.root, bg="sky blue", height=self.Canvas_Height, width=self.Canvas_Width)
-		self.root.title("Flabby Bird")
+		self.root.title("Dinosaur game")
 		self.canvas.pack()
 		
 		#create the ground
